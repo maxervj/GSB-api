@@ -1,0 +1,104 @@
+{
+  "praticiens_exemples": [
+    {
+      "nom": "Dubois",
+      "prenom": "François",
+      "tel": "0145678901",
+      "email": "francois.dubois@medecin.fr",
+      "rue": "12 Avenue des Champs",
+      "code_postal": "75008",
+      "ville": "Paris"
+    },
+    {
+      "nom": "Lefebvre",
+      "prenom": "Catherine",
+      "tel": "0234567890",
+      "email": "catherine.lefebvre@medecin.fr",
+      "rue": "45 Rue de la République",
+      "code_postal": "69002",
+      "ville": "Lyon"
+    },
+    {
+      "nom": "Moreau",
+      "prenom": "Philippe",
+      "tel": "0323456789",
+      "email": "philippe.moreau@medecin.fr",
+      "rue": "78 Boulevard Victor Hugo",
+      "code_postal": "13001",
+      "ville": "Marseille"
+    },
+    {
+      "nom": "Simon",
+      "prenom": "Isabelle",
+      "tel": "0412345678",
+      "email": "isabelle.simon@medecin.fr",
+      "rue": "23 Rue Gambetta",
+      "code_postal": "31000",
+      "ville": "Toulouse"
+    },
+    {
+      "nom": "Laurent",
+      "prenom": "Michel",
+      "tel": "0501234567",
+      "email": "michel.laurent@medecin.fr",
+      "rue": "56 Avenue de la Liberté",
+      "code_postal": "44000",
+      "ville": "Nantes"
+    }
+  ],
+  "exemples_requetes": {
+    "créer_un_praticien": {
+      "methode": "POST",
+      "url": "http://localhost:3005/api/praticiens",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "nom": "Dubois",
+        "prenom": "François",
+        "tel": "0145678901",
+        "email": "francois.dubois@medecin.fr",
+        "rue": "12 Avenue des Champs",
+        "code_postal": "75008",
+        "ville": "Paris"
+      }
+    },
+    "récupérer_tous_les_praticiens": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/praticiens"
+    },
+    "récupérer_un_praticien": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/praticiens/{id}",
+      "note": "Remplacer {id} par l'ID MongoDB du praticien"
+    },
+    "récupérer_praticiens_par_ville": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/praticiens/ville/Paris"
+    },
+    "rechercher_praticiens": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/praticiens/search?q=dubois"
+    },
+    "mettre_à_jour_un_praticien": {
+      "methode": "PUT",
+      "url": "http://localhost:3005/api/praticiens/{id}",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "nom": "Dubois",
+        "prenom": "François-Xavier",
+        "tel": "0145678901",
+        "email": "francois.dubois@medecin.fr",
+        "rue": "12 Avenue des Champs",
+        "code_postal": "75008",
+        "ville": "Paris"
+      }
+    },
+    "supprimer_un_praticien": {
+      "methode": "DELETE",
+      "url": "http://localhost:3005/api/praticiens/{id}"
+    }
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "visites_exemples": [
+    {
+      "date_visite": "2024-12-01T09:00:00.000Z",
+      "commentaire": "Présentation du nouveau traitement pour l'hypertension. Le praticien s'est montré très intéressé et souhaite recevoir plus d'informations.",
+      "visiteur_id": "{ID_VISITEUR}",
+      "praticien_id": "{ID_PRATICIEN}",
+      "motif_id": "{ID_MOTIF}"
+    },
+    {
+      "date_visite": "2024-12-02T14:30:00.000Z",
+      "commentaire": "Suivi de la prescription du mois dernier. Le praticien a commandé 10 boîtes supplémentaires.",
+      "visiteur_id": "{ID_VISITEUR}",
+      "praticien_id": "{ID_PRATICIEN}",
+      "motif_id": "{ID_MOTIF}"
+    },
+    {
+      "date_visite": "2024-12-03T10:00:00.000Z",
+      "commentaire": "Démonstration du nouveau dispositif médical. Formation complète réalisée avec succès.",
+      "visiteur_id": "{ID_VISITEUR}",
+      "praticien_id": "{ID_PRATICIEN}",
+      "motif_id": "{ID_MOTIF}"
+    },
+    {
+      "date_visite": "2024-12-05T16:00:00.000Z",
+      "commentaire": "Rencontre de courtoisie. Discussion sur les besoins futurs du cabinet.",
+      "visiteur_id": "{ID_VISITEUR}",
+      "praticien_id": "{ID_PRATICIEN}",
+      "motif_id": "{ID_MOTIF}"
+    }
+  ],
+  "note_importante": "Pour créer une visite, vous devez d'abord avoir créé un visiteur, un praticien et un motif, puis récupérer leurs IDs MongoDB pour les utiliser dans la requête.",
+  "exemples_requetes": {
+    "1_créer_visiteur_praticien_motif": {
+      "description": "Avant de créer une visite, créez d'abord les entités nécessaires",
+      "etapes": [
+        "POST http://localhost:3005/api/visiteurs (voir test-visiteurs.json)",
+        "POST http://localhost:3005/api/praticiens (voir test-praticiens.json)",
+        "POST http://localhost:3005/api/motifs (voir test-motifs.json)",
+        "Récupérez les IDs (_id) retournés dans chaque réponse"
+      ]
+    },
+    "2_créer_une_visite": {
+      "methode": "POST",
+      "url": "http://localhost:3005/api/visites",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "date_visite": "2024-12-01T09:00:00.000Z",
+        "commentaire": "Présentation du nouveau traitement pour l'hypertension",
+        "visiteur": "674c1a2b3d4e5f6a7b8c9d0e",
+        "praticien": "674c1a2b3d4e5f6a7b8c9d0f",
+        "motif": "674c1a2b3d4e5f6a7b8c9d10"
+      },
+      "note": "Remplacez les IDs par les vrais IDs MongoDB créés précédemment"
+    },
+    "récupérer_toutes_les_visites": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/visites"
+    },
+    "récupérer_une_visite": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/visites/{id}",
+      "note": "Remplacer {id} par l'ID MongoDB de la visite"
+    },
+    "récupérer_visites_par_visiteur": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/visites/visiteur/{visiteurId}",
+      "note": "Remplacer {visiteurId} par l'ID du visiteur"
+    },
+    "récupérer_visites_par_praticien": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/visites/praticien/{praticienId}",
+      "note": "Remplacer {praticienId} par l'ID du praticien"
+    },
+    "récupérer_visites_par_motif": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/visites/motif/{motifId}",
+      "note": "Remplacer {motifId} par l'ID du motif"
+    },
+    "récupérer_visites_par_période": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/visites/date-range?startDate=2024-12-01&endDate=2024-12-31",
+      "note": "Les dates doivent être au format ISO (YYYY-MM-DD)"
+    },
+    "récupérer_statistiques": {
+      "methode": "GET",
+      "url": "http://localhost:3005/api/visites/stats",
+      "description": "Retourne le total des visites, les visites par motif et les visites par mois"
+    },
+    "mettre_à_jour_une_visite": {
+      "methode": "PUT",
+      "url": "http://localhost:3005/api/visites/{id}",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "date_visite": "2024-12-01T10:00:00.000Z",
+        "commentaire": "Commentaire mis à jour"
+      },
+      "note": "Vous pouvez mettre à jour uniquement les champs nécessaires"
+    },
+    "supprimer_une_visite": {
+      "methode": "DELETE",
+      "url": "http://localhost:3005/api/visites/{id}"
+    }
+  },
+  "exemple_complet": {
+    "description": "Exemple de workflow complet pour tester l'API",
+    "etapes": [
+      {
+        "etape": 1,
+        "action": "Créer un visiteur",
+        "methode": "POST",
+        "url": "http://localhost:3005/api/visiteurs",
+        "body": {
+          "nom": "Dupont",
+          "prenom": "Jean",
+          "tel": "0612345678",
+          "email": "jean.dupont@gsb.fr",
+          "date_embauche": "2020-01-15"
+        },
+        "resultat_attendu": "Récupérer l'ID du visiteur (ex: 674c1a2b3d4e5f6a7b8c9d0e)"
+      },
+      {
+        "etape": 2,
+        "action": "Créer un praticien",
+        "methode": "POST",
+        "url": "http://localhost:3005/api/praticiens",
+        "body": {
+          "nom": "Dubois",
+          "prenom": "François",
+          "tel": "0145678901",
+          "email": "francois.dubois@medecin.fr",
+          "rue": "12 Avenue des Champs",
+          "code_postal": "75008",
+          "ville": "Paris"
+        },
+        "resultat_attendu": "Récupérer l'ID du praticien (ex: 674c1a2b3d4e5f6a7b8c9d0f)"
+      },
+      {
+        "etape": 3,
+        "action": "Créer un motif",
+        "methode": "POST",
+        "url": "http://localhost:3005/api/motifs",
+        "body": {
+          "libelle": "Consultation générale"
+        },
+        "resultat_attendu": "Récupérer l'ID du motif (ex: 674c1a2b3d4e5f6a7b8c9d10)"
+      },
+      {
+        "etape": 4,
+        "action": "Créer une visite avec les IDs récupérés",
+        "methode": "POST",
+        "url": "http://localhost:3005/api/visites",
+        "body": {
+          "date_visite": "2024-12-01T09:00:00.000Z",
+          "commentaire": "Première visite réussie",
+          "visiteur": "674c1a2b3d4e5f6a7b8c9d0e",
+          "praticien": "674c1a2b3d4e5f6a7b8c9d0f",
+          "motif": "674c1a2b3d4e5f6a7b8c9d10"
+        }
+      }
+    ]
+  }
+}
