@@ -88,6 +88,56 @@ export class MotifController {
     }
   }
 
+  /**
+   * Met à jour un motif
+   */
+  async updateMotif(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { libelle } = req.body;
+
+      // Si le libellé est modifié, vérifier qu'il n'existe pas déjà
+      if (libelle) {
+        const existingMotif = await Motif.findOne({
+          libelle: libelle,
+          _id: { $ne: id }
+        });
+        if (existingMotif) {
+          res.status(400).json({
+            success: false,
+            message: 'Un motif avec ce libellé existe déjà'
+          });
+          return;
+        }
+      }
+
+      const motif = await Motif.findByIdAndUpdate(
+        id,
+        { libelle },
+        { new: true, runValidators: true }
+      );
+
+      if (!motif) {
+        res.status(404).json({
+          success: false,
+          message: 'Motif non trouvé'
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Motif mis à jour avec succès',
+        data: motif
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: 'Erreur lors de la mise à jour du motif',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
 
   /**
    * Supprime un motif

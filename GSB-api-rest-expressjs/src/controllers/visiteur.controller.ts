@@ -57,6 +57,9 @@ export class VisiteurController {
     }
   }
 
+  
+  
+
   /**
    * Crée un nouveau visiteur
    */
@@ -96,15 +99,34 @@ export class VisiteurController {
     }
   }
 
-  
-
   /**
-   * Supprime un visiteur
+   * Met à jour un visiteur
    */
-  async deleteVisiteur(req: Request, res: Response): Promise<void> {
+  async updateVisiteur(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const visiteur = await Visiteur.findByIdAndDelete(id);
+      const { nom, prenom, tel, email, date_embauche } = req.body;
+
+      // Si l'email est modifié, vérifier qu'il n'existe pas déjà
+      if (email) {
+        const existingVisiteur = await Visiteur.findOne({
+          email: email,
+          _id: { $ne: id }
+        });
+        if (existingVisiteur) {
+          res.status(400).json({
+            success: false,
+            message: 'Un visiteur avec cet email existe déjà'
+          });
+          return;
+        }
+      }
+
+      const visiteur = await Visiteur.findByIdAndUpdate(
+        id,
+        { nom, prenom, tel, email, date_embauche },
+        { new: true, runValidators: true }
+      );
 
       if (!visiteur) {
         res.status(404).json({
@@ -116,13 +138,13 @@ export class VisiteurController {
 
       res.status(200).json({
         success: true,
-        message: 'Visiteur supprimé avec succès',
+        message: 'Visiteur mis à jour avec succès',
         data: visiteur
       });
     } catch (error) {
-      res.status(500).json({
+      res.status(400).json({
         success: false,
-        message: 'Erreur lors de la suppression du visiteur',
+        message: 'Erreur lors de la mise à jour du visiteur',
         error: error instanceof Error ? error.message : 'Erreur inconnue'
       });
     }
@@ -133,7 +155,7 @@ export class VisiteurController {
    */
   async searchVisiteurs(req: Request, res: Response): Promise<void> {
     try {
-      const { q } = req.query;
+      const q = req.query.q as string;
 
       if (!q || typeof q !== 'string') {
         res.status(400).json({
@@ -160,6 +182,163 @@ export class VisiteurController {
       res.status(500).json({
         success: false,
         message: 'Erreur lors de la recherche des visiteurs',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Récupère les visiteurs par nom
+   */
+  async getVisiteurByName(req: Request, res: Response): Promise<void> {
+    try {
+      const nom = req.params.nom;
+      const visiteurs = await Visiteur.find({
+        nom: { $regex: nom, $options: 'i' }
+      })
+        .populate('visites')
+        .sort({ prenom: 1 });
+
+      if (visiteurs.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: 'Aucun visiteur trouvé avec ce nom'
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        count: visiteurs.length,
+        data: visiteurs
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des visiteurs par nom',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Récupère les visiteurs par email
+   */
+  async getVisiteurByEmail(req: Request, res: Response): Promise<void> {
+    try {
+      const email = req.params.email;
+      const visiteur = await Visiteur.findOne({ email }).populate('visites');
+
+      if (!visiteur) {
+        res.status(404).json({
+          success: false,
+          message: 'Aucun visiteur trouvé avec cet email'
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: visiteur
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération du visiteur par email',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Récupère les visiteurs par téléphone
+   */
+  async getVisiteurByTel(req: Request, res: Response): Promise<void> {
+    try {
+      const tel = req.params.tel;
+      const visiteurs = await Visiteur.find({
+        tel: { $regex: tel, $options: 'i' }
+      }).populate('visites');
+
+      if (visiteurs.length === 0) {
+        res.status(404).json({
+          success: false,
+          message: 'Aucun visiteur trouvé avec ce numéro de téléphone'
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        count: visiteurs.length,
+        data: visiteurs
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des visiteurs par téléphone',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Récupère les visiteurs par date d'embauche (année)
+   */
+  async getVisiteursByDateEmbauche(req: Request, res: Response): Promise<void> {
+    try {
+      const { year } = req.params;
+      const startDate = new Date(`${year}-01-01`);
+      const endDate = new Date(`${year}-12-31`);
+
+      const visiteurs = await Visiteur.find({
+        date_embauche: {
+          $gte: startDate,
+          $lte: endDate
+        }
+      })
+        .populate('visites')
+        .sort({ date_embauche: -1 });
+
+      res.status(200).json({
+        success: true,
+        count: visiteurs.length,
+        data: visiteurs
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des visiteurs par date d\'embauche',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Supprime un visiteur
+   */
+  async deleteVisiteur(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const visiteur = await Visiteur.findByIdAndDelete(id);
+
+      if (!visiteur) {
+        res.status(404).json({
+          success: false,
+          message: 'Visiteur non trouvé'
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        message: 'Visiteur supprimé avec succès',
+        data: visiteur
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la suppression du visiteur',
         error: error instanceof Error ? error.message : 'Erreur inconnue'
       });
     }

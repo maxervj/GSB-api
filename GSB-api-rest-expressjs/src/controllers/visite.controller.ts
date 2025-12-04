@@ -65,8 +65,88 @@ export class VisiteController {
     }
   }
 
- 
- 
+  /**
+   * Récupère les visites d'un visiteur
+   */
+  async getVisitesByVisiteur(req: Request, res: Response): Promise<void> {
+    try {
+      const visiteurId = req.params.visiteurId;
+
+      const visites = await Visite.find({ visiteur: visiteurId })
+        .populate('visiteur', 'nom prenom email')
+        .populate('praticien', 'nom prenom email ville')
+        .populate('motif', 'libelle')
+        .sort({ date_visite: -1 });
+
+      res.status(200).json({
+        success: true,
+        count: visites.length,
+        data: visites
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des visites du visiteur',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Récupère les visites d'un praticien
+   */
+  async getVisitesByPraticien(req: Request, res: Response): Promise<void> {
+    try {
+      const praticienId = req.params.praticienId;
+
+      const visites = await Visite.find({ praticien: praticienId })
+        .populate('visiteur', 'nom prenom email')
+        .populate('praticien', 'nom prenom email ville')
+        .populate('motif', 'libelle')
+        .sort({ date_visite: -1 });
+
+      res.status(200).json({
+        success: true,
+        count: visites.length,
+        data: visites
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des visites du praticien',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Récupère les visites par motif
+   */
+  async getVisitesByMotif(req: Request, res: Response): Promise<void> {
+    try {
+      const motifId = req.params.motifId;
+
+      const visites = await Visite.find({ motif: motifId })
+        .populate('visiteur', 'nom prenom email')
+        .populate('praticien', 'nom prenom email ville')
+        .populate('motif', 'libelle')
+        .sort({ date_visite: -1 });
+
+      res.status(200).json({
+        success: true,
+        count: visites.length,
+        data: visites
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des visites par motif',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+
 
  
 
@@ -105,6 +185,76 @@ export class VisiteController {
       res.status(500).json({
         success: false,
         message: 'Erreur lors de la récupération des visites par période',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
+   * Récupère les statistiques des visites
+   */
+  async getVisitesStats(req: Request, res: Response): Promise<void> {
+    try {
+      const totalVisites = await Visite.countDocuments();
+      const visitesParMotif = await Visite.aggregate([
+        {
+          $group: {
+            _id: '$motif',
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $lookup: {
+            from: 'motifs',
+            localField: '_id',
+            foreignField: '_id',
+            as: 'motif'
+          }
+        },
+        {
+          $unwind: '$motif'
+        },
+        {
+          $project: {
+            motif: '$motif.libelle',
+            count: 1
+          }
+        },
+        {
+          $sort: { count: -1 }
+        }
+      ]);
+
+      const visitesParMois = await Visite.aggregate([
+        {
+          $group: {
+            _id: {
+              year: { $year: '$date_visite' },
+              month: { $month: '$date_visite' }
+            },
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $sort: { '_id.year': -1, '_id.month': -1 }
+        },
+        {
+          $limit: 12
+        }
+      ]);
+
+      res.status(200).json({
+        success: true,
+        data: {
+          totalVisites,
+          visitesParMotif,
+          visitesParMois
+        }
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des statistiques',
         error: error instanceof Error ? error.message : 'Erreur inconnue'
       });
     }
@@ -274,76 +424,6 @@ export class VisiteController {
       res.status(500).json({
         success: false,
         message: 'Erreur lors de la suppression de la visite',
-        error: error instanceof Error ? error.message : 'Erreur inconnue'
-      });
-    }
-  }
-
-  /**
-   * Récupère les statistiques des visites
-   */
-  async getVisitesStats(req: Request, res: Response): Promise<void> {
-    try {
-      const totalVisites = await Visite.countDocuments();
-      const visitesParMotif = await Visite.aggregate([
-        {
-          $group: {
-            _id: '$motif',
-            count: { $sum: 1 }
-          }
-        },
-        {
-          $lookup: {
-            from: 'motifs',
-            localField: '_id',
-            foreignField: '_id',
-            as: 'motif'
-          }
-        },
-        {
-          $unwind: '$motif'
-        },
-        {
-          $project: {
-            motif: '$motif.libelle',
-            count: 1
-          }
-        },
-        {
-          $sort: { count: -1 }
-        }
-      ]);
-
-      const visitesParMois = await Visite.aggregate([
-        {
-          $group: {
-            _id: {
-              year: { $year: '$date_visite' },
-              month: { $month: '$date_visite' }
-            },
-            count: { $sum: 1 }
-          }
-        },
-        {
-          $sort: { '_id.year': -1, '_id.month': -1 }
-        },
-        {
-          $limit: 12
-        }
-      ]);
-
-      res.status(200).json({
-        success: true,
-        data: {
-          totalVisites,
-          visitesParMotif,
-          visitesParMois
-        }
-      });
-    } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: 'Erreur lors de la récupération des statistiques',
         error: error instanceof Error ? error.message : 'Erreur inconnue'
       });
     }

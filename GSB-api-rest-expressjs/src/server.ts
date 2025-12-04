@@ -3,6 +3,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { Database } from './config/database.js';
 import visiteurRoutes from './routes/visiteur.routes.js';
+import visiteRoutes from './routes/visite.routes.js';
+import praticienRoutes from './routes/praticien.routes.js';
+import motifRoutes from './routes/motif.routes.js';
+
 
 
 // Chargement des variables d'environnement
@@ -55,7 +59,10 @@ class App {
         version: '1.0.0',
         endpoints: {
           health: '/health',
-          visiteurs: '/api/visiteurs'
+          visiteurs: '/api/visiteurs',
+          visites: '/api/visites',
+          praticiens: '/api/praticiens',
+          motifs: '/api/motifs'
         }
       });
     });
@@ -72,6 +79,9 @@ class App {
 
     // Routes API
     this.app.use('/api/visiteurs', visiteurRoutes);
+    this.app.use('/api/visites', visiteRoutes);
+    this.app.use('/api/praticiens', praticienRoutes);
+    this.app.use('/api/motifs', motifRoutes);
   }
 
 

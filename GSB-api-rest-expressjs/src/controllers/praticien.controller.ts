@@ -62,7 +62,7 @@ export class PraticienController {
    */
   async getPraticiensByVille(req: Request, res: Response): Promise<void> {
     try {
-      const { ville } = req.params;
+      const ville = req.params.ville;
 
       const praticiens = await Praticien.find({
         ville: { $regex: ville, $options: 'i' }
@@ -134,7 +134,7 @@ export class PraticienController {
       // Si l'email est modifié, vérifier qu'il n'existe pas déjà
       if (email) {
         const existingPraticien = await Praticien.findOne({
-          email,
+          email: email,
           _id: { $ne: id }
         });
         if (existingPraticien) {
