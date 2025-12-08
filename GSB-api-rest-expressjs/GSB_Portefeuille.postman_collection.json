@@ -1,0 +1,209 @@
+{
+  "info": {
+    "name": "GSB API - Portefeuille de Praticiens",
+    "description": "Collection Postman pour tester l'API de gestion des portefeuilles de praticiens",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Ajouter un praticien au portefeuille",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"visiteur\": \"{{visiteurId}}\",\n  \"praticien\": \"{{praticienId}}\",\n  \"notes\": \"Praticien important pour la région Nord\",\n  \"priorite\": \"haute\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles"]
+        },
+        "description": "Ajoute un praticien au portefeuille d'un visiteur"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Récupérer le portefeuille d'un visiteur",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/visiteur/{{visiteurId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "visiteur", "{{visiteurId}}"]
+        },
+        "description": "Récupère tous les praticiens du portefeuille d'un visiteur"
+      },
+      "response": []
+    },
+    {
+      "name": "3. Récupérer le portefeuille actif d'un visiteur",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/visiteur/{{visiteurId}}?statut=actif",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "visiteur", "{{visiteurId}}"],
+          "query": [
+            {
+              "key": "statut",
+              "value": "actif"
+            }
+          ]
+        },
+        "description": "Récupère uniquement les praticiens actifs du portefeuille"
+      },
+      "response": []
+    },
+    {
+      "name": "4. Récupérer un élément du portefeuille",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/{{portefeuilleId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "{{portefeuilleId}}"]
+        },
+        "description": "Récupère les détails d'un élément spécifique du portefeuille"
+      },
+      "response": []
+    },
+    {
+      "name": "5. Récupérer les praticiens par priorité - Haute",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/visiteur/{{visiteurId}}/priorite/haute",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "visiteur", "{{visiteurId}}", "priorite", "haute"]
+        },
+        "description": "Récupère les praticiens de priorité haute"
+      },
+      "response": []
+    },
+    {
+      "name": "6. Récupérer les praticiens par priorité - Normale",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/visiteur/{{visiteurId}}/priorite/normale",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "visiteur", "{{visiteurId}}", "priorite", "normale"]
+        },
+        "description": "Récupère les praticiens de priorité normale"
+      },
+      "response": []
+    },
+    {
+      "name": "7. Récupérer les praticiens par priorité - Basse",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/visiteur/{{visiteurId}}/priorite/basse",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "visiteur", "{{visiteurId}}", "priorite", "basse"]
+        },
+        "description": "Récupère les praticiens de priorité basse"
+      },
+      "response": []
+    },
+    {
+      "name": "8. Récupérer les statistiques du portefeuille",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/visiteur/{{visiteurId}}/stats",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "visiteur", "{{visiteurId}}", "stats"]
+        },
+        "description": "Récupère les statistiques du portefeuille (total, actifs, priorités, etc.)"
+      },
+      "response": []
+    },
+    {
+      "name": "9. Mettre à jour un élément du portefeuille",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"notes\": \"Notes mises à jour\",\n  \"priorite\": \"normale\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/{{portefeuilleId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "{{portefeuilleId}}"]
+        },
+        "description": "Met à jour les notes, la priorité ou le statut d'un élément du portefeuille"
+      },
+      "response": []
+    },
+    {
+      "name": "10. Basculer le statut (actif/inactif)",
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/{{portefeuilleId}}/toggle-statut",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "{{portefeuilleId}}", "toggle-statut"]
+        },
+        "description": "Bascule le statut entre actif et inactif"
+      },
+      "response": []
+    },
+    {
+      "name": "11. Retirer un praticien du portefeuille",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/portefeuilles/{{portefeuilleId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "portefeuilles", "{{portefeuilleId}}"]
+        },
+        "description": "Supprime un praticien du portefeuille"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "visiteurId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "praticienId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "portefeuilleId",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

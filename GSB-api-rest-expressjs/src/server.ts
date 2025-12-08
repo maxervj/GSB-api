@@ -6,6 +6,7 @@ import visiteurRoutes from './modules/visiteur/visiteur.routes.js';
 import visiteRoutes from './modules/visite/visite.routes.js';
 import praticienRoutes from './modules/praticien/praticien.routes.js';
 import motifRoutes from './modules/motif/motif.routes.js';
+import portefeuilleRoutes from './modules/portefeuille/portefeuille.routes.js';
 
 // Chargement des variables d'environnement
 dotenv.config();
@@ -56,7 +57,8 @@ class App {
           visiteurs: '/api/visiteurs',
           visites: '/api/visites',
           praticiens: '/api/praticiens',
-          motifs: '/api/motifs'
+          motifs: '/api/motifs',
+          portefeuilles: '/api/portefeuilles'
         }
       });
     });
@@ -75,6 +77,7 @@ class App {
     this.app.use('/api/visites', visiteRoutes);
     this.app.use('/api/praticiens', praticienRoutes);
     this.app.use('/api/motifs', motifRoutes);
+    this.app.use('/api/portefeuilles', portefeuilleRoutes);
   }
 
   /**
