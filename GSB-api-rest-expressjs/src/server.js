@@ -2,10 +2,10 @@ import express, {} from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Database } from './config/database.js';
-import visiteurRoutes from './routes/visiteur.routes.js';
-import visiteRoutes from './routes/visite.routes.js';
-import praticienRoutes from './routes/praticien.routes.js';
-import motifRoutes from './routes/motif.routes.js';
+import visiteurRoutes from './modules/visiteur/visiteur.routes.js';
+import visiteRoutes from './modules/visite/visite.routes.js';
+import praticienRoutes from './modules/praticien/praticien.routes.js';
+import motifRoutes from './modules/motif/motif.routes.js';
 // Chargement des variables d'environnement
 dotenv.config();
 /**
