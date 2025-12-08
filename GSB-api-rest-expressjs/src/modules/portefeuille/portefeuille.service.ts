@@ -24,6 +24,34 @@ export class PortefeuilleService {
   }
 
   /**
+   * Récupère uniquement les praticiens du portefeuille d'un visiteur
+   * Retourne une liste simplifiée de praticiens avec les infos du portefeuille
+   */
+  async getPraticiensFromPortefeuille(visiteurId: string, statut?: string) {
+    const filter: any = { visiteur: visiteurId };
+
+    if (statut) {
+      filter.statut = statut;
+    }
+
+    const portefeuille = await Portefeuille.find(filter)
+      .populate('praticien')
+      .sort({ priorite: -1, date_ajout: -1 });
+
+    // Transformer pour retourner les praticiens avec les métadonnées du portefeuille
+    return portefeuille.map((item: any) => ({
+      ...item.praticien.toObject(),
+      portefeuille_info: {
+        id: item._id,
+        date_ajout: item.date_ajout,
+        priorite: item.priorite,
+        statut: item.statut,
+        notes: item.notes
+      }
+    }));
+  }
+
+  /**
    * Récupère un élément spécifique du portefeuille
    */
   async getPortefeuilleById(id: string) {

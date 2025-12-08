@@ -49,6 +49,44 @@ export class PortefeuilleController {
   }
 
   /**
+   * Récupère uniquement les praticiens du portefeuille d'un visiteur
+   * GET /api/portefeuilles/visiteur/:visiteurId/praticiens
+   */
+  async getPraticiensFromPortefeuille(req: any, res: any) {
+    try {
+      const { visiteurId } = req.params;
+      const { statut } = req.query;
+
+      // Vérifier si le visiteur existe
+      const visiteurExists = await this.portefeuilleService.visiteurExists(visiteurId);
+      if (!visiteurExists) {
+        res.status(404).json({
+          success: false,
+          message: 'Visiteur non trouvé'
+        });
+        return;
+      }
+
+      const praticiens = await this.portefeuilleService.getPraticiensFromPortefeuille(
+        visiteurId,
+        statut
+      );
+
+      res.status(200).json({
+        success: true,
+        count: praticiens.length,
+        data: praticiens
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erreur lors de la récupération des praticiens',
+        error: error instanceof Error ? error.message : 'Erreur inconnue'
+      });
+    }
+  }
+
+  /**
    * Récupère un élément spécifique du portefeuille
    * GET /api/portefeuilles/:id
    */

@@ -14,6 +14,12 @@ router.get(
   (req, res) => portefeuilleController.getPortefeuilleStats(req, res)
 );
 
+// GET /api/portefeuilles/visiteur/:visiteurId/praticiens - Récupère uniquement les praticiens du portefeuille
+router.get(
+  '/visiteur/:visiteurId/praticiens',
+  (req, res) => portefeuilleController.getPraticiensFromPortefeuille(req, res)
+);
+
 // GET /api/portefeuilles/visiteur/:visiteurId/priorite/:priorite - Récupère les praticiens par priorité
 router.get(
   '/visiteur/:visiteurId/priorite/:priorite',
