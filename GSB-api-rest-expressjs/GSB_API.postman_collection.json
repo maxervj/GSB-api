@@ -1,0 +1,727 @@
+{
+	"info": {
+		"_postman_id": "gsb-api-collection-2024",
+		"name": "GSB API - Collection Complète",
+		"description": "Collection complète pour tester toutes les routes de l'API GSB (Visiteurs, Praticiens, Motifs, Visites)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "API Info",
+			"item": [
+				{
+					"name": "Get API Info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"]
+						}
+					}
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Visiteurs",
+			"item": [
+				{
+					"name": "Get All Visiteurs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs"]
+						}
+					}
+				},
+				{
+					"name": "Get Visiteur By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{visiteur_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Search Visiteurs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/search?q=dupon",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "search"],
+							"query": [
+								{
+									"key": "q",
+									"value": "dupon"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Visiteurs By Name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/nom/Dupont",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "nom", "Dupont"]
+						}
+					}
+				},
+				{
+					"name": "Get Visiteur By Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/email/jean.dupont@gsb.fr",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "email", "jean.dupont@gsb.fr"]
+						}
+					}
+				},
+				{
+					"name": "Get Visiteurs By Tel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/tel/0612345678",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "tel", "0612345678"]
+						}
+					}
+				},
+				{
+					"name": "Get Visiteurs By Year",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/annee/2024",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "annee", "2024"]
+						}
+					}
+				},
+				{
+					"name": "Create Visiteur",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"visiteur_id\", jsonData.data._id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"tel\": \"0612345678\",\n  \"email\": \"jean.dupont@gsb.fr\",\n  \"date_embauche\": \"2024-01-15\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs"]
+						}
+					}
+				},
+				{
+					"name": "Update Visiteur",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean-Pierre\",\n  \"tel\": \"0612345679\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{visiteur_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Visiteur",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{visiteur_id}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Praticiens",
+			"item": [
+				{
+					"name": "Get All Praticiens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens"]
+						}
+					}
+				},
+				{
+					"name": "Get Praticien By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{praticien_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Search Praticiens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/search?q=martin",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", "search"],
+							"query": [
+								{
+									"key": "q",
+									"value": "martin"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Praticiens By Ville",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/ville/Paris",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", "ville", "Paris"]
+						}
+					}
+				},
+				{
+					"name": "Create Praticien",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"praticien_id\", jsonData.data._id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Sophie\",\n  \"tel\": \"0145678901\",\n  \"email\": \"sophie.martin@medecin.fr\",\n  \"rue\": \"15 rue de la Santé\",\n  \"code_postal\": \"75013\",\n  \"ville\": \"Paris\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/praticiens",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens"]
+						}
+					}
+				},
+				{
+					"name": "Update Praticien",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tel\": \"0145678902\",\n  \"rue\": \"20 rue de la Santé\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{praticien_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Praticien",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{praticien_id}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Motifs",
+			"item": [
+				{
+					"name": "Get All Motifs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs"]
+						}
+					}
+				},
+				{
+					"name": "Get Motif By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{motif_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Search Motifs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs/search?q=présentation",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", "search"],
+							"query": [
+								{
+									"key": "q",
+									"value": "présentation"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Create Motif",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"motif_id\", jsonData.data._id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"libelle\": \"Présentation produit\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/motifs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs"]
+						}
+					}
+				},
+				{
+					"name": "Update Motif",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"libelle\": \"Présentation nouveau produit\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/motifs/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{motif_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Motif",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{motif_id}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Visites",
+			"item": [
+				{
+					"name": "Get All Visites",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites"]
+						}
+					}
+				},
+				{
+					"name": "Get Visite By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{visite_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Visites By Visiteur",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/visiteur/:visiteurId",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "visiteur", ":visiteurId"],
+							"variable": [
+								{
+									"key": "visiteurId",
+									"value": "{{visiteur_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Visites By Praticien",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/praticien/:praticienId",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "praticien", ":praticienId"],
+							"variable": [
+								{
+									"key": "praticienId",
+									"value": "{{praticien_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Visites By Motif",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/motif/:motifId",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "motif", ":motifId"],
+							"variable": [
+								{
+									"key": "motifId",
+									"value": "{{motif_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Visites By Date Range",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/periode?startDate=2024-01-01&endDate=2024-12-31",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "periode"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-12-31"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Visites Stats",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/stats",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "stats"]
+						}
+					}
+				},
+				{
+					"name": "Create Visite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"visite_id\", jsonData.data._id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date_visite\": \"2024-12-08\",\n  \"commentaire\": \"Visite de présentation des nouveaux produits. Le praticien est intéressé.\",\n  \"visiteur\": \"{{visiteur_id}}\",\n  \"praticien\": \"{{praticien_id}}\",\n  \"motif\": \"{{motif_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visites",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites"]
+						}
+					}
+				},
+				{
+					"name": "Update Visite",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"commentaire\": \"Visite très productive. Commande prévue pour le mois prochain.\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visites/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{visite_id}}"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Visite",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/:id",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", ":id"],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{visite_id}}"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3005",
+			"type": "string"
+		},
+		{
+			"key": "visiteur_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "praticien_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "motif_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "visite_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

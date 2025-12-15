@@ -1,33 +1,33 @@
-import express, { type Application, type Request, type Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { Database } from './config/database.js';
-import visiteurRoutes from './routes/visiteur.routes.js';
-
+import visiteurRoutes from './modules/visiteur/visiteur.routes.js';
+import visiteRoutes from './modules/visite/visite.routes.js';
+import praticienRoutes from './modules/praticien/praticien.routes.js';
+import motifRoutes from './modules/motif/motif.routes.js';
+import portefeuilleRoutes from './modules/portefeuille/portefeuille.routes.js';
 
 // Chargement des variables d'environnement
 dotenv.config();
-
 
 /**
  * Gère la configuration et le démarrage du serveur Express
  */
 class App {
-  public app: Application;
+  private app: express.Application;
   private port: number;
   private database: Database;
-
 
   constructor() {
     this.app = express();
     this.port = parseInt(process.env.PORT || '3000', 10);
     this.database = Database.getInstance();
-   
+
     this.initializeMiddlewares();
     this.initializeRoutes();
     this.initializeDatabase();
   }
-
 
   /**
    * Configure les middlewares Express
@@ -35,34 +35,36 @@ class App {
   private initializeMiddlewares(): void {
     // Parse le JSON dans les requêtes
     this.app.use(express.json());
-   
+
     // Parse les données URL-encoded
     this.app.use(express.urlencoded({ extended: true }));
-   
+
     // Active CORS pour toutes les origines
     this.app.use(cors());
   }
-
 
   /**
    * Configure les routes de l'application
    */
   private initializeRoutes(): void {
     // Route de test
-    this.app.get('/', (req: Request, res: Response) => {
+    this.app.get('/', (req, res) => {
       res.json({
         message: 'API REST Express.js + TypeScript + MongoDB',
         version: '1.0.0',
         endpoints: {
           health: '/health',
-          visiteurs: '/api/visiteurs'
+          visiteurs: '/api/visiteurs',
+          visites: '/api/visites',
+          praticiens: '/api/praticiens',
+          motifs: '/api/motifs',
+          portefeuilles: '/api/portefeuilles'
         }
       });
     });
 
-
     // Route de santé pour vérifier que l'API fonctionne
-    this.app.get('/health', (req: Request, res: Response) => {
+    this.app.get('/health', (req, res) => {
       res.json({
         status: 'OK',
         timestamp: new Date().toISOString(),
@@ -72,8 +74,11 @@ class App {
 
     // Routes API
     this.app.use('/api/visiteurs', visiteurRoutes);
+    this.app.use('/api/visites', visiteRoutes);
+    this.app.use('/api/praticiens', praticienRoutes);
+    this.app.use('/api/motifs', motifRoutes);
+    this.app.use('/api/portefeuilles', portefeuilleRoutes);
   }
-
 
   /**
    * Initialise la connexion à la base de données
@@ -81,7 +86,6 @@ class App {
   private async initializeDatabase(): Promise<void> {
     await this.database.connect();
   }
-
 
   /**
    * Démarre le serveur Express
@@ -96,11 +100,9 @@ class App {
   }
 }
 
-
 // Création et démarrage de l'application
 const app = new App();
 app.listen();
-
 
 process.on('SIGINT', async () => {
   console.log('\n Arrêt du serveur...');
