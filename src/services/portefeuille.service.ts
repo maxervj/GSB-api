@@ -85,7 +85,7 @@ export class PortefeuilleService {
 
     return await Portefeuille.find(query)
       .select('-visiteur')
-      .populate('praticien', 'nom prenom email tel rue code_postal ville')
+      .populate('praticien', 'nom prenom email ville')
       .sort({ date_ajout: -1 });
   }
 

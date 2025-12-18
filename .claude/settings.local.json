@@ -6,7 +6,8 @@
       "Bash(npm run build:*)",
       "Bash(curl:*)",
       "Bash(find:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git fetch:*)"
     ]
   }
 }

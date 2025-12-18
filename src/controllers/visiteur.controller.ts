@@ -18,7 +18,7 @@ export class VisiteurController {
   async getAllVisiteurs(req: Request, res: Response): Promise<void> {
     try {
       const visiteurs = await Visiteur.find()
-        .select('_id nom prenom email tel')
+        .select('-_id nom prenom email tel')
         .sort({ nom: 1, prenom: 1 });
 
       res.status(200).json({
