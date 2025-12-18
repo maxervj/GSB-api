@@ -1,0 +1,42 @@
+import { Router } from 'express';
+import { PortefeuilleController } from '../controllers/portefeuille.controller.js';
+
+const router = Router();
+const portefeuilleController = new PortefeuilleController();
+
+/**
+ * Routes pour la gestion du portefeuille visiteur/praticien
+ * Chaque route fait appel à une méthode du PortefeuilleController
+ * 
+ * - GET /api/portefeuille
+ * - GET /api/portefeuille/visiteur/:visiteurId
+ * - GET /api/portefeuille/praticien/:praticienId
+ * - POST /api/portefeuille
+ * - PATCH /api/portefeuille/:visiteurId/:praticienId/notes
+ * - PATCH /api/portefeuille/:visiteurId/:praticienId/remove
+ * - DELETE /api/portefeuille/:visiteurId/:praticienId  
+ * 
+ */
+
+// GET /api/portefeuille - Récupère toutes les relations de portefeuille
+router.get('/', (req, res) => portefeuilleController.getAll(req, res));
+
+// GET /api/portefeuille/visiteur/:visiteurId - Récupère le portefeuille d'un visiteur
+router.get('/visiteur/:visiteurId', (req, res) => portefeuilleController.getByVisiteur(req, res));
+
+// GET /api/portefeuille/praticien/:praticienId - Récupère tous les visiteurs associés à un praticien
+router.get('/praticien/:praticienId', (req, res) => portefeuilleController.getByPraticien(req, res));
+
+// POST /api/portefeuille - Ajoute un praticien au portefeuille d'un visiteur
+router.post('/', (req, res) => portefeuilleController.addPraticien(req, res));
+
+// PATCH /api/portefeuille/:visiteurId/:praticienId/notes - Met à jour les notes d'une relation
+router.patch('/:visiteurId/:praticienId/notes', (req, res) => portefeuilleController.updateNotes(req, res));
+
+// PATCH /api/portefeuille/:visiteurId/:praticienId/remove - Désactive un praticien du portefeuille (soft delete)
+router.patch('/:visiteurId/:praticienId/remove', (req, res) => portefeuilleController.removePraticien(req, res));
+
+// DELETE /api/portefeuille/:visiteurId/:praticienId - Supprime définitivement une relation
+router.delete('/:visiteurId/:praticienId', (req, res) => portefeuilleController.deleteRelation(req, res));
+
+export default router;
