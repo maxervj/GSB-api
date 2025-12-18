@@ -1,0 +1,37 @@
+{
+  "name": "GSB-api-rest-expressjs",
+  "version": "1.0.0",
+  "description": "Api pour l'application GSB mobile",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "nodemon --watch src --exec tsx src/server.ts",
+    "build": "tsc"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "GSB",
+    "typescript",
+    "mongoose"
+  ],
+  "author": "Merveille MAKOSI",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/mongoose": "^5.11.96",
+    "@types/node": "^24.10.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^9.0.0",
+    "nodemon": "^3.1.11",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.5"
+  }
+}
