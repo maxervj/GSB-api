@@ -1,0 +1,743 @@
+{
+	"info": {
+		"_postman_id": "gsb-api-collection-2025",
+		"name": "GSB API REST",
+		"description": "Collection Postman pour l'API GSB - Gestion des visiteurs, praticiens, visites et motifs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "visiteur_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "praticien_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "visite_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "motif_id",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Racine API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/",
+							"host": ["{{base_url}}"],
+							"path": [""]
+						},
+						"description": "Route de test pour vérifier que l'API est démarrée"
+					}
+				},
+				{
+					"name": "Health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/health",
+							"host": ["{{base_url}}"],
+							"path": ["health"]
+						},
+						"description": "Vérifie l'état de santé de l'API"
+					}
+				}
+			]
+		},
+		{
+			"name": "Visiteurs",
+			"item": [
+				{
+					"name": "Récupérer tous les visiteurs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs"]
+						},
+						"description": "Récupère la liste complète des visiteurs"
+					}
+				},
+				{
+					"name": "Rechercher des visiteurs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/search?nom=Dupont&prenom=Jean",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "search"],
+							"query": [
+								{
+									"key": "nom",
+									"value": "Dupont"
+								},
+								{
+									"key": "prenom",
+									"value": "Jean"
+								}
+							]
+						},
+						"description": "Recherche des visiteurs par nom et/ou prénom"
+					}
+				},
+				{
+					"name": "Récupérer un visiteur par ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/{{visiteur_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "{{visiteur_id}}"]
+						},
+						"description": "Récupère un visiteur spécifique par son ID"
+					}
+				},
+				{
+					"name": "Créer un visiteur",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"tel\": \"0601020304\",\n  \"email\": \"jean.dupont@example.com\",\n  \"date_embauche\": \"2024-01-15\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs"]
+						},
+						"description": "Crée un nouveau visiteur"
+					}
+				},
+				{
+					"name": "Mettre à jour un visiteur",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"tel\": \"0601020305\",\n  \"email\": \"jean.dupont@example.com\",\n  \"date_embauche\": \"2024-01-15\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/{{visiteur_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "{{visiteur_id}}"]
+						},
+						"description": "Met à jour un visiteur existant"
+					}
+				},
+				{
+					"name": "Supprimer un visiteur",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/{{visiteur_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "{{visiteur_id}}"]
+						},
+						"description": "Supprime un visiteur"
+					}
+				}
+			]
+		},
+		{
+			"name": "Portefeuille",
+			"item": [
+				{
+					"name": "Récupérer toutes les relations portefeuille",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/portefeuille?actif=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "portefeuille"],
+							"query": [
+								{
+									"key": "actif",
+									"value": "true",
+									"description": "Filtre sur les relations actives (true/false)"
+								}
+							]
+						},
+						"description": "Récupère toutes les relations visiteur/praticien du portefeuille"
+					}
+				},
+				{
+					"name": "Récupérer le portefeuille d'un visiteur",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/portefeuille/visiteur/{{visiteur_id}}?actif=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "portefeuille", "visiteur", "{{visiteur_id}}"],
+							"query": [
+								{
+									"key": "actif",
+									"value": "true",
+									"description": "Filtre sur les relations actives (true/false)"
+								}
+							]
+						},
+						"description": "Récupère le portefeuille de praticiens d'un visiteur (sans données visiteur - sécurisé)"
+					}
+				},
+				{
+					"name": "Récupérer les visiteurs d'un praticien",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/portefeuille/praticien/{{praticien_id}}?actif=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "portefeuille", "praticien", "{{praticien_id}}"],
+							"query": [
+								{
+									"key": "actif",
+									"value": "true",
+									"description": "Filtre sur les relations actives (true/false)"
+								}
+							]
+						},
+						"description": "Récupère tous les visiteurs associés à un praticien"
+					}
+				},
+				{
+					"name": "Ajouter un praticien au portefeuille",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"visiteurId\": \"{{visiteur_id}}\",\n  \"praticienId\": \"{{praticien_id}}\",\n  \"notes\": \"Praticien prioritaire\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/portefeuille",
+							"host": ["{{base_url}}"],
+							"path": ["api", "portefeuille"]
+						},
+						"description": "Ajoute un praticien au portefeuille d'un visiteur avec des notes optionnelles"
+					}
+				},
+				{
+					"name": "Retirer un praticien du portefeuille (Soft Delete)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/portefeuille/{{visiteur_id}}/{{praticien_id}}/remove",
+							"host": ["{{base_url}}"],
+							"path": ["api", "portefeuille", "{{visiteur_id}}", "{{praticien_id}}", "remove"]
+						},
+						"description": "Désactive un praticien du portefeuille (marque comme inactif, ne supprime pas définitivement)"
+					}
+				},
+				{
+					"name": "Mettre à jour les notes d'une relation",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"notes\": \"Notes mises à jour sur ce praticien\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/portefeuille/{{visiteur_id}}/{{praticien_id}}/notes",
+							"host": ["{{base_url}}"],
+							"path": ["api", "portefeuille", "{{visiteur_id}}", "{{praticien_id}}", "notes"]
+						},
+						"description": "Met à jour les notes d'une relation visiteur/praticien"
+					}
+				},
+				{
+					"name": "Supprimer définitivement une relation",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/portefeuille/{{visiteur_id}}/{{praticien_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "portefeuille", "{{visiteur_id}}", "{{praticien_id}}"]
+						},
+						"description": "Supprime définitivement une relation visiteur/praticien du portefeuille"
+					}
+				},
+				{
+					"name": "[OLD] Ajouter praticien via visiteur",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"praticienId\": \"{{praticien_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/{{visiteur_id}}/portefeuille",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "{{visiteur_id}}", "portefeuille"]
+						},
+						"description": "[DEPRECATED] Ancienne méthode - Ajoute un praticien au portefeuille via route visiteurs"
+					}
+				},
+				{
+					"name": "[OLD] Récupérer portefeuille via visiteur",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visiteurs/{{visiteur_id}}/portefeuille",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visiteurs", "{{visiteur_id}}", "portefeuille"]
+						},
+						"description": "[DEPRECATED] Ancienne méthode - Récupère le portefeuille via route visiteurs"
+					}
+				}
+			]
+		},
+		{
+			"name": "Praticiens",
+			"item": [
+				{
+					"name": "Récupérer tous les praticiens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens"]
+						},
+						"description": "Récupère la liste complète des praticiens"
+					}
+				},
+				{
+					"name": "Rechercher des praticiens",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/search?nom=Martin&prenom=Sophie",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", "search"],
+							"query": [
+								{
+									"key": "nom",
+									"value": "Martin"
+								},
+								{
+									"key": "prenom",
+									"value": "Sophie"
+								}
+							]
+						},
+						"description": "Recherche des praticiens par nom et/ou prénom"
+					}
+				},
+				{
+					"name": "Récupérer les praticiens par ville",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/ville/Paris",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", "ville", "Paris"]
+						},
+						"description": "Récupère tous les praticiens d'une ville spécifique"
+					}
+				},
+				{
+					"name": "Récupérer un praticien par ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/{{praticien_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", "{{praticien_id}}"]
+						},
+						"description": "Récupère un praticien spécifique par son ID"
+					}
+				},
+				{
+					"name": "Créer un praticien",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Sophie\",\n  \"tel\": \"0612345678\",\n  \"email\": \"sophie.martin@example.com\",\n  \"rue\": \"15 avenue des Champs\",\n  \"code_postal\": \"75008\",\n  \"ville\": \"Paris\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/praticiens",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens"]
+						},
+						"description": "Crée un nouveau praticien"
+					}
+				},
+				{
+					"name": "Mettre à jour un praticien",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Sophie\",\n  \"tel\": \"0612345679\",\n  \"email\": \"sophie.martin@example.com\",\n  \"rue\": \"15 avenue des Champs\",\n  \"code_postal\": \"75008\",\n  \"ville\": \"Paris\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/{{praticien_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", "{{praticien_id}}"]
+						},
+						"description": "Met à jour un praticien existant"
+					}
+				},
+				{
+					"name": "Supprimer un praticien",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/praticiens/{{praticien_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "praticiens", "{{praticien_id}}"]
+						},
+						"description": "Supprime un praticien"
+					}
+				}
+			]
+		},
+		{
+			"name": "Visites",
+			"item": [
+				{
+					"name": "Récupérer toutes les visites",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites"]
+						},
+						"description": "Récupère la liste complète des visites"
+					}
+				},
+				{
+					"name": "Récupérer les statistiques des visites",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/stats",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "stats"]
+						},
+						"description": "Récupère les statistiques globales des visites"
+					}
+				},
+				{
+					"name": "Récupérer les visites par période",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/date-range?startDate=2024-01-01&endDate=2024-12-31",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "date-range"],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-01-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-12-31"
+								}
+							]
+						},
+						"description": "Récupère les visites dans une période donnée"
+					}
+				},
+				{
+					"name": "Récupérer les visites d'un visiteur",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/visiteur/{{visiteur_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "visiteur", "{{visiteur_id}}"]
+						},
+						"description": "Récupère toutes les visites effectuées par un visiteur"
+					}
+				},
+				{
+					"name": "Récupérer les visites d'un praticien",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/praticien/{{praticien_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "praticien", "{{praticien_id}}"]
+						},
+						"description": "Récupère toutes les visites reçues par un praticien"
+					}
+				},
+				{
+					"name": "Récupérer les visites par motif",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/motif/{{motif_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "motif", "{{motif_id}}"]
+						},
+						"description": "Récupère toutes les visites pour un motif spécifique"
+					}
+				},
+				{
+					"name": "Récupérer une visite par ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/{{visite_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "{{visite_id}}"]
+						},
+						"description": "Récupère une visite spécifique par son ID"
+					}
+				},
+				{
+					"name": "Créer une visite",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date_visite\": \"2024-12-15T10:00:00.000Z\",\n  \"commentaire\": \"Présentation des nouveaux produits\",\n  \"visiteur\": \"{{visiteur_id}}\",\n  \"praticien\": \"{{praticien_id}}\",\n  \"motif\": \"{{motif_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visites",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites"]
+						},
+						"description": "Crée une nouvelle visite"
+					}
+				},
+				{
+					"name": "Mettre à jour une visite",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"date_visite\": \"2024-12-15T14:00:00.000Z\",\n  \"commentaire\": \"Visite modifiée - Présentation et formation\",\n  \"visiteur\": \"{{visiteur_id}}\",\n  \"praticien\": \"{{praticien_id}}\",\n  \"motif\": \"{{motif_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/visites/{{visite_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "{{visite_id}}"]
+						},
+						"description": "Met à jour une visite existante"
+					}
+				},
+				{
+					"name": "Supprimer une visite",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/visites/{{visite_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "visites", "{{visite_id}}"]
+						},
+						"description": "Supprime une visite"
+					}
+				}
+			]
+		},
+		{
+			"name": "Motifs",
+			"item": [
+				{
+					"name": "Récupérer tous les motifs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs"]
+						},
+						"description": "Récupère la liste complète des motifs de visite"
+					}
+				},
+				{
+					"name": "Rechercher des motifs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs/search?libelle=Formation",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", "search"],
+							"query": [
+								{
+									"key": "libelle",
+									"value": "Formation"
+								}
+							]
+						},
+						"description": "Recherche des motifs par libellé"
+					}
+				},
+				{
+					"name": "Récupérer un motif par ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs/{{motif_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", "{{motif_id}}"]
+						},
+						"description": "Récupère un motif spécifique par son ID"
+					}
+				},
+				{
+					"name": "Créer un motif",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"libelle\": \"Présentation produit\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/motifs",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs"]
+						},
+						"description": "Crée un nouveau motif de visite"
+					}
+				},
+				{
+					"name": "Mettre à jour un motif",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"libelle\": \"Présentation et formation produit\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/motifs/{{motif_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", "{{motif_id}}"]
+						},
+						"description": "Met à jour un motif existant"
+					}
+				},
+				{
+					"name": "Supprimer un motif",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/motifs/{{motif_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "motifs", "{{motif_id}}"]
+						},
+						"description": "Supprime un motif"
+					}
+				}
+			]
+		}
+	]
+}

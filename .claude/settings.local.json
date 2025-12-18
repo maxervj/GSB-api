@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Création du service VisiteurService pour la gestion du portefeuille\n\n- Création du dossier services\n- Méthode addPraticienToPortefeuille: ajoute un praticien au portefeuille d''un visiteur\n- Méthode getPortefeuillePraticiens: récupère le portefeuille d''un visiteur\n- Validation des IDs et gestion des erreurs\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(npm run build:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
