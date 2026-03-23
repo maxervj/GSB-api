@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { MotifController } from '../controllers/motif.controller.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { apiLimiter } from '../middleware/rateLimiter.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
 import {
   createMotifValidation,
@@ -11,16 +13,8 @@ import {
 const router = Router();
 const motifController = new MotifController();
 
-/**
- * Routes pour les motifs
- * 
- * - GET /api/motifs
- * - GET /api/motifs/search
- * - GET /api/motifs/:id
- * - POST /api/motifs
- * - PUT /api/motifs/:id
- * - DELETE /api/motifs/:id
- */
+// Applique le rate limiter et l'authentification JWT sur toutes les routes motifs
+router.use(apiLimiter, authMiddleware);
 
 // GET /api/motifs - Récupère tous les motifs
 router.get('/', (req, res) => motifController.getAllMotifs(req, res));

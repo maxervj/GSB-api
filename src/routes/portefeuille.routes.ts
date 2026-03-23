@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { PortefeuilleController } from '../controllers/portefeuille.controller.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { apiLimiter } from '../middleware/rateLimiter.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
 import {
   addPraticienToPortefeuilleValidation,
@@ -13,19 +15,8 @@ import {
 const router = Router();
 const portefeuilleController = new PortefeuilleController();
 
-/**
- * Routes pour la gestion du portefeuille visiteur/praticien
- * Chaque route fait appel à une méthode du PortefeuilleController
- * 
- * - GET /api/portefeuille
- * - GET /api/portefeuille/visiteur/:visiteurId
- * - GET /api/portefeuille/praticien/:praticienId
- * - POST /api/portefeuille
- * - PATCH /api/portefeuille/:visiteurId/:praticienId/notes
- * - PATCH /api/portefeuille/:visiteurId/:praticienId/remove
- * - DELETE /api/portefeuille/:visiteurId/:praticienId  
- * 
- */
+// Applique le rate limiter et l'authentification JWT sur toutes les routes portefeuille
+router.use(apiLimiter, authMiddleware);
 
 // GET /api/portefeuille - Récupère toutes les relations de portefeuille
 router.get('/', (req, res) => portefeuilleController.getAll(req, res));
@@ -42,7 +33,7 @@ router.post('/', addPraticienToPortefeuilleValidation, validate, (req, res) => p
 // PATCH /api/portefeuille/:visiteurId/:praticienId/notes - Met à jour les notes d'une relation
 router.patch('/:visiteurId/:praticienId/notes', updateNotesValidation, validate, (req, res) => portefeuilleController.updateNotes(req, res));
 
-// PATCH /api/portefeuille/:visiteurId/:praticienId/remove - Désactive un praticien du portefeuille (soft delete)
+// PATCH /api/portefeuille/:visiteurId/:praticienId/remove - Désactive un praticien du portefeuille
 router.patch('/:visiteurId/:praticienId/remove', removePraticienValidation, validate, (req, res) => portefeuilleController.removePraticien(req, res));
 
 // DELETE /api/portefeuille/:visiteurId/:praticienId - Supprime définitivement une relation

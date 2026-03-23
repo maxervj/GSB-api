@@ -1,13 +1,28 @@
 import rateLimit from 'express-rate-limit';
 
 /**
- * Middleware de rate limiting pour limiter le nombre de requêtes par IP
- * Bloque après 10 requêtes consécutives pendant 15 minutes
+ * Limiter strict pour les routes d'authentification (signup / login)
+ * Anti brute-force : 5 tentatives par IP toutes les 15 minutes
  */
-export const rateLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // Limite chaque IP à 10 requêtes par fenêtre de 15 minutes
-  message: 'Trop de requêtes depuis cette IP, veuillez réessayer plus tard.',
-  standardHeaders: true, // Retourne les informations de rate limit dans les headers `RateLimit-*`
-  legacyHeaders: false, // Désactive les headers `X-RateLimit-*`
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: { success: false, message: 'Trop de tentatives de connexion. Réessayez dans 15 minutes.' },
+  standardHeaders: true,
+  legacyHeaders: false,
 });
+
+/**
+ * Limiter standard pour les routes API protégées
+ * 100 requêtes par IP toutes les 15 minutes
+ */
+export const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: { success: false, message: 'Trop de requêtes depuis cette IP, veuillez réessayer plus tard.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Alias conservé pour compatibilité
+export const rateLimiter = apiLimiter;

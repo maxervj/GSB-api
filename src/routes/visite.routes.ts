@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { VisiteController } from '../controllers/visite.controller.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { apiLimiter } from '../middleware/rateLimiter.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
 import {
   createVisiteValidation,
@@ -14,9 +16,8 @@ import {
 const router = Router();
 const visiteController = new VisiteController();
 
-/**
- * Routes pour les visites
- */
+// Applique le rate limiter et l'authentification JWT sur toutes les routes visites
+router.use(apiLimiter, authMiddleware);
 
 // GET /api/visites - Récupère toutes les visites
 router.get('/', (req, res) => visiteController.getAllVisites(req, res));

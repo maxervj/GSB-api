@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import { PraticienController } from '../controllers/praticien.controller.js';
+import { authMiddleware } from '../middleware/auth.js';
+import { apiLimiter } from '../middleware/rateLimiter.middleware.js';
 import { validate } from '../middleware/validate.middleware.js';
 import {
   createPraticienValidation,
@@ -11,9 +13,8 @@ import {
 const router = Router();
 const praticienController = new PraticienController();
 
-/**
- * Routes pour les praticiens
- */
+// Applique le rate limiter et l'authentification JWT sur toutes les routes praticiens
+router.use(apiLimiter, authMiddleware);
 
 // GET /api/praticiens - Récupère tous les praticiens
 router.get('/', (req, res) => praticienController.getAllPraticiens(req, res));
@@ -28,7 +29,7 @@ router.get('/ville/:ville', (req, res) => praticienController.getPraticiensByVil
 router.get('/:id', getPraticienByIdValidation, validate, (req, res) => praticienController.getPraticienById(req, res));
 
 // POST /api/praticiens - Crée un nouveau praticien
- router.post('/', (req, res) => praticienController.createPraticien(req, res));
+router.post('/', (req, res) => praticienController.createPraticien(req, res));
 
 // PUT /api/praticiens/:id - Met à jour un praticien
 router.put('/:id', updatePraticienValidation, validate, (req, res) => praticienController.updatePraticien(req, res));
