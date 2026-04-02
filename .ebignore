@@ -1,0 +1,9 @@
+src/
+.env
+.env.local
+coverage/
+*.log
+.github/
+nodemon.json
+tsconfig*.json
+jest.config.ts

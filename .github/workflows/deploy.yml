@@ -1,0 +1,76 @@
+name: CI/CD – Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # ─────────────────────────────────────────
+  # Job 1 : Tests
+  # ─────────────────────────────────────────
+  test:
+    name: Tests unitaires
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Lancement des tests Jest
+        run: npm test
+
+  # ─────────────────────────────────────────
+  # Job 2 : Build & Deploy
+  # ─────────────────────────────────────────
+  build-and-deploy:
+    name: Build & Deploy sur Elastic Beanstalk
+    runs-on: ubuntu-latest
+    needs: test  # Le déploiement ne se lance qu'après succès des tests
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Compilation TypeScript
+        run: npm run build
+
+      - name: Création du package de déploiement
+        run: |
+          zip -r deploy.zip \
+            dist/ \
+            package.json \
+            package-lock.json \
+            Procfile \
+            .ebextensions/
+
+      - name: Déploiement sur AWS Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+          region: ${{ secrets.AWS_REGION }}
+          application_name: ${{ secrets.EB_APPLICATION_NAME }}
+          environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}
+          version_label: gsb-api-${{ github.sha }}
+          deployment_package: deploy.zip
+          wait_for_environment_recovery: 60
