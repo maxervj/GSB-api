@@ -50,16 +50,20 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
-      - name: Installation des dépendances
+      - name: Installation des dépendances (build complet)
         run: npm ci
 
       - name: Compilation TypeScript
         run: npm run build
 
+      - name: Installation des dépendances de production uniquement
+        run: npm ci --omit=dev
+
       - name: Création du package de déploiement
         run: |
           zip -r deploy.zip \
             dist/ \
+            node_modules/ \
             package.json \
             package-lock.json \
             Procfile \
@@ -70,7 +74,6 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
           region: ${{ secrets.AWS_REGION }}
           application_name: ${{ secrets.EB_APPLICATION_NAME }}
           environment_name: ${{ secrets.EB_ENVIRONMENT_NAME }}

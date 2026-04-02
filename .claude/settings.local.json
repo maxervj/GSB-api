@@ -8,7 +8,11 @@
       "Bash(find:*)",
       "Bash(git commit:*)",
       "Bash(git fetch:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(cd \"C:/Projets GSB/GSB-api-rest-expressjs\" && npm test 2>&1)",
+      "Bash(cd \"C:/Projets GSB/GSB-api-rest-expressjs\" && npm run build 2>&1)",
+      "Bash(npx jest:*)"
     ]
   }
 }
