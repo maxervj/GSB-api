@@ -62,7 +62,7 @@ export class PortefeuilleController {
         return;
       }
 
-      await this.portefeuilleService.removePraticien(visiteurId, praticienId);
+      await this.portefeuilleService.removePraticien(visiteurId as string, praticienId as string);
 
       res.status(200).json({
         success: true,
@@ -91,7 +91,7 @@ export class PortefeuilleController {
         return;
       }
 
-      await this.portefeuilleService.deleteRelation(visiteurId, praticienId);
+      await this.portefeuilleService.deleteRelation(visiteurId as string, praticienId as string);
 
       res.status(200).json({
         success: true,
@@ -121,7 +121,7 @@ export class PortefeuilleController {
       }
 
       const actifOnly = req.query.actif !== 'false';
-      const portefeuille = await this.portefeuilleService.getByVisiteur(visiteurId, actifOnly);
+      const portefeuille = await this.portefeuilleService.getByVisiteur(visiteurId as string, actifOnly);
 
       res.status(200).json({
         success: true,
@@ -152,7 +152,7 @@ export class PortefeuilleController {
       }
 
       const actifOnly = req.query.actif !== 'false';
-      const portefeuille = await this.portefeuilleService.getByPraticien(praticienId, actifOnly);
+      const portefeuille = await this.portefeuilleService.getByPraticien(praticienId as string, actifOnly);
 
       res.status(200).json({
         success: true,
@@ -192,8 +192,8 @@ export class PortefeuilleController {
       }
 
       const portefeuille = await this.portefeuilleService.updateNotes(
-        visiteurId,
-        praticienId,
+        visiteurId as string,
+        praticienId as string,
         notes
       );
 

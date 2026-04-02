@@ -1,6 +1,6 @@
 import type { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import type { AuthenticatedRequest } from '../types/authenticatedRequest';
+import type { AuthenticatedRequest } from '../types/authenticatedRequest.js';
 
 interface DecodedToken {
   userId: string;
@@ -19,8 +19,8 @@ export const authMiddleware = (
       throw new Error('Authorization header is missing.');
     }
 
-    const token = authHeader.split(' ')[1];
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string, { algorithms: ['HS256'] }) as DecodedToken;
+    const token = authHeader.split(' ')[1] as string;
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string, { algorithms: ['HS256'] }) as unknown as DecodedToken;
 
     req.auth = { userId: decodedToken.userId, role: decodedToken.role };
     next();
